@@ -1,0 +1,6 @@
+{
+  "name": "NYC Salón Beauty",
+  "description": "Sitio web oficial de NYC Salón Beauty Supply en Escazú, Costa Rica. Especialistas en color, tratamientos capilares, uñas, barbería y capacitaciones.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
