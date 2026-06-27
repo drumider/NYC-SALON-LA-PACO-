@@ -31,12 +31,18 @@ import Footer from './components/Footer';
 import { SERVICES, FAQS, HIGHLIGHTS } from './data';
 import { Service } from './types';
 
+// Import image assets directly so Vite can bundle and hash them for production/Vercel
+import heroImg from './assets/images/nyc_salon_hero_1782425071357.jpg';
+import hairImg from './assets/images/nyc_salon_hair_1782425089522.jpg';
+import nailsImg from './assets/images/nyc_salon_nails_1782425099196.jpg';
+import barberImg from './assets/images/nyc_salon_barber_1782425109070.jpg';
+
 // Real high-quality generated assets
 const SALON_IMAGES = {
-  hero: "/src/assets/images/nyc_salon_hero_1782425071357.jpg",
-  hair: "/src/assets/images/nyc_salon_hair_1782425089522.jpg",
-  nails: "/src/assets/images/nyc_salon_nails_1782425099196.jpg",
-  barber: "/src/assets/images/nyc_salon_barber_1782425109070.jpg",
+  hero: heroImg,
+  hair: hairImg,
+  nails: nailsImg,
+  barber: barberImg,
 };
 
 export default function App() {
