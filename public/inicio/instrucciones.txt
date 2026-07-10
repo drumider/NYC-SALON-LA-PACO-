@@ -1,0 +1,6 @@
+Para cambiar la foto del inicio de la página web de NYC Salón, sigue estos pasos muy sencillos:
+
+1. Elige tu nueva foto (se recomienda que tenga una proporción rectangular o cuadrada, en formato PNG).
+2. Nombra tu archivo de imagen exactamente como: foto_inicio.png
+3. Sube o reemplaza el archivo en esta misma carpeta ('public/inicio/').
+4. ¡Listo! La página web cargará automáticamente tu nueva foto sin necesidad de tocar ningún código.

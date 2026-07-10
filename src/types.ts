@@ -8,7 +8,7 @@ export interface Service {
   name: string;
   description: string;
   price: number; // in Costa Rican Colones (₡)
-  category: 'cabello' | 'uñas' | 'barberia' | 'capacitacion';
+  category: 'cabello' | 'uñas' | 'barberia';
   duration: string; // e.g. "1h 30m"
   isPopular?: boolean;
 }

@@ -31,9 +31,11 @@ export default function EstimatorForm({
   const [couponError, setCouponError] = useState('');
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [whatsappUrl, setWhatsappUrl] = useState('');
+  const [hasCompanion, setHasCompanion] = useState(false);
 
   // Format money
   const formatPrice = (val: number) => {
+    if (val === 0) return 'Por Consultar';
     return new Intl.NumberFormat('es-CR', {
       style: 'currency',
       currency: 'CRC',
@@ -54,19 +56,23 @@ export default function EstimatorForm({
         .filter(s => s.id === 'c1' || s.id === 'c2' || s.id === 'c3')
         .reduce((sum, s) => sum + s.price, 0);
       discount = colorServicesTotal * 0.15;
-    } else if (appliedPromo.discountCode === 'ACRYLICPEDISP50') {
-      // Half off pedicure spa if acryllic full set is selected
-      const hasAcrylic = selectedServices.some(s => s.id === 'u1');
+    } else if (appliedPromo.discountCode === 'MARTESUNAS') {
+      // 25% off pedicure spa (u3) if acrylic (u1) or Gel-X (u4) is selected
+      const hasNails = selectedServices.some(s => s.id === 'u1' || s.id === 'u4');
       const pedicura = selectedServices.find(s => s.id === 'u3');
-      if (hasAcrylic && pedicura) {
-        discount = pedicura.price * 0.5;
-      } else {
-        // Fallback default small discount if they just apply it
-        discount = 3000;
+      const nailServices = selectedServices.filter(s => s.id === 'u1' || s.id === 'u4');
+      
+      let promoDiscount = 0;
+      if (hasNails && pedicura) {
+        promoDiscount += pedicura.price * 0.25; // 25% on pedicure
       }
-    } else if (appliedPromo.discountCode === 'BIENVENIDAORGA') {
-      // Treat as free express hydration, value ~₡6000 discount
-      discount = 6000;
+      
+      if (hasCompanion && nailServices.length > 0) {
+        const nailsTotal = nailServices.reduce((sum, s) => sum + s.price, 0);
+        promoDiscount += nailsTotal * 0.25; // 25% additional on full set services
+      }
+      
+      discount = promoDiscount > 0 ? promoDiscount : 3000;
     }
   }
 
@@ -113,14 +119,18 @@ export default function EstimatorForm({
       .map(s => `- ${s.name} (${formatPrice(s.price)})`)
       .join('%0A');
 
+    const companionMsgText = (appliedPromo?.discountCode === 'MARTESUNAS' && hasCompanion)
+      ? '%0A👥 *Acompañante:* Sí (+25% Desc. Adicional)'
+      : '';
+
     const promoText = appliedPromo
       ? `%0A🎟️ *Cupón Aplicado:* ${appliedPromo.discountCode} (-${formatPrice(discount)})`
       : '';
 
-    const message = `¡Hola *NYC Salón Beauty Supply*! ✨%0A%0AHe cotizado mi cita desde su sitio web y me gustaría programarla:%0A%0A👤 *Cliente:* ${clientName}%0A📞 *Teléfono:* ${clientPhone}%0A📅 *Fecha deseada:* ${date || 'Por coordinar'}%0A⏰ *Hora deseada:* ${time || 'Por coordinar'}%0A💇‍♀️ *Especialista:* ${stylistLabel}%0A%0A🛍️ *Servicios Solicitados:*%0A${servicesListText}%0A%0A💰 *Resumen:*%0A- Subtotal: ${formatPrice(subtotal)}${promoText}%0A- *Total Estimado:* ${formatPrice(total)}%0A%0A📝 *Notas:* ${notes || 'Ninguna'}`;
+    const message = `¡Hola *NYC Salón Beauty Supply*! ✨%0A%0AHe cotizado mi cita desde su sitio web y me gustaría programarla:%0A%0A👤 *Cliente:* ${clientName}%0A📞 *Teléfono:* ${clientPhone}%0A📅 *Fecha deseada:* ${date || 'Por coordinar'}%0A⏰ *Hora deseada:* ${time || 'Por coordinar'}%0A💇‍♀️ *Especialista:* ${stylistLabel}${companionMsgText}%0A%0A🛍️ *Servicios Solicitados:*%0A${servicesListText}%0A%0A💰 *Resumen:*%0A- Subtotal: ${formatPrice(subtotal)}${promoText}%0A- *Total Estimado:* ${formatPrice(total)}%0A%0A📝 *Notas:* ${notes || 'Ninguna'}`;
 
-    // WhatsApp URL with Costa Rica country code (+506) and their phone number (40345687)
-    const url = `https://wa.me/50640345687?text=${message}`;
+    // WhatsApp URL with Costa Rica country code (+506) and their phone number (71049478)
+    const url = `https://wa.me/50671049478?text=${message}`;
     setWhatsappUrl(url);
     setBookingSuccess(true);
   };
@@ -134,6 +144,7 @@ export default function EstimatorForm({
     setNotes('');
     setCouponCode('');
     setAppliedPromo(null);
+    setHasCompanion(false);
     onClearServices();
   };
 
@@ -343,11 +354,28 @@ export default function EstimatorForm({
                   onClick={() => {
                     setAppliedPromo(null);
                     setCouponCode('');
+                    setHasCompanion(false);
                   }}
                   className="font-bold hover:text-emerald-950 text-emerald-600"
                 >
                   Remover
                 </button>
+              </div>
+            )}
+
+            {appliedPromo?.discountCode === 'MARTESUNAS' && (
+              <div className="bg-emerald-50/50 border border-emerald-100 p-3.5 flex items-start gap-3 transition-all">
+                <input
+                  type="checkbox"
+                  id="hasCompanion"
+                  checked={hasCompanion}
+                  onChange={(e) => setHasCompanion(e.target.checked)}
+                  className="mt-0.5 rounded-none border-emerald-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer w-4 h-4"
+                />
+                <label htmlFor="hasCompanion" className="text-xs text-emerald-900 cursor-pointer leading-tight select-none">
+                  <strong className="text-emerald-800 font-semibold">¿Vienes con un acompañante?</strong>
+                  <p className="text-[11px] text-emerald-700/80 mt-1">Activa esta opción para recibir un 25% de descuento adicional en tu set completo de Acrílicas o Gel-X.</p>
+                </label>
               </div>
             )}
           </div>
@@ -428,6 +456,12 @@ export default function EstimatorForm({
                 {date || 'Por acordar'} - {time || 'Por acordar'}
               </strong>
             </div>
+            {appliedPromo?.discountCode === 'MARTESUNAS' && hasCompanion && (
+              <div>
+                <span className="text-neutral-500">Acompañante:</span>{' '}
+                <strong className="text-editorial-charcoal">Sí (+25% Desc. Adicional)</strong>
+              </div>
+            )}
             <div>
               <span className="text-neutral-500">Total Estimado:</span>{' '}
               <strong className="text-editorial-camel font-sans">{formatPrice(total)}</strong>

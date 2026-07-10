@@ -60,7 +60,7 @@ export default function Footer() {
                 <MapPin className="w-4 h-4 text-editorial-camel shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="font-semibold text-neutral-200">Ubicación física:</p>
-                  <p className="text-neutral-400 leading-relaxed">Calle Guachipelín de Escazú, San Rafael de Escazú, San José, Costa Rica, 10203</p>
+                  <p className="text-neutral-400 leading-relaxed">Frente al Centro Comercial La Paco, San Rafael de Escazú, San José, Costa Rica</p>
                 </div>
               </li>
 
@@ -76,8 +76,8 @@ export default function Footer() {
                 <Phone className="w-4 h-4 text-editorial-camel shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="font-semibold text-neutral-200">Teléfono Celular:</p>
-                  <a href="tel:40345687" className="text-editorial-camel hover:underline hover:text-white">
-                    4034-5687
+                  <a href="tel:71049478" className="text-editorial-camel hover:underline hover:text-white">
+                    7104-9478
                   </a>
                 </div>
               </li>
@@ -107,47 +107,40 @@ export default function Footer() {
                   <span className="flex items-center gap-1.5 font-medium">
                     <Clock className="w-3.5 h-3.5 text-editorial-camel" /> Lunes a Sábado:
                   </span>
-                  <span className="text-neutral-200 font-semibold font-mono">8:00 AM - 7:00 PM</span>
+                  <span className="text-neutral-200 font-semibold font-mono">9:00 AM - 6:00 PM</span>
                 </div>
-                <div className="flex justify-between items-center text-neutral-400">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <Clock className="w-3.5 h-3.5 text-editorial-camel" /> Domingo:
-                  </span>
-                  <span className="text-editorial-camel font-semibold">Cerrado</span>
+                <div className="flex flex-col gap-1 text-neutral-400">
+                  <div className="flex justify-between items-center">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-editorial-camel" /> Domingo:
+                    </span>
+                    <span className="text-editorial-camel font-semibold text-right font-sans">Eventos y citas mayores a ₡50.000</span>
+                  </div>
+                  <p className="text-[10px] text-neutral-500 text-right leading-none mt-0.5">Programadas previamente</p>
                 </div>
               </div>
 
               {/* Styled interactive map card linking out */}
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=calle+Guachipelin+de+Escazu+San+Rafael+San+Jose+Costa+Rica"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block relative rounded-none overflow-hidden aspect-video border border-neutral-800 bg-neutral-900 transition-all hover:border-editorial-camel/50 shadow-lg cursor-pointer"
-              >
-                {/* Styled grid as a map representation */}
-                <div className="absolute inset-0 bg-[radial-gradient(#262626_1px,transparent_1px)] [background-size:16px_16px] opacity-40" />
+              <div className="relative rounded-none overflow-hidden aspect-video border border-neutral-800 bg-neutral-900 shadow-lg">
+                <iframe
+                  title="Mapa de Ubicación NYC Salón"
+                  src="https://maps.google.com/maps?q=NYC%20Sal%C3%B3n,%20Escaz%C3%BA,%20Costa%20Rica&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full filter invert-[90%] hue-rotate-[180deg] contrast-[100%] opacity-85"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
+                  loading="lazy"
+                />
                 
-                {/* Custom stylized map markings */}
-                <div className="absolute inset-0 flex flex-col justify-center items-center">
-                  <div className="relative">
-                    {/* Ring animation */}
-                    <span className="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-editorial-camel opacity-75" />
-                    {/* Inner Pin */}
-                    <div className="relative w-7 h-7 bg-editorial-camel border-2 border-white rounded-full flex items-center justify-center shadow-lg">
-                      <MapPin className="w-3.5 h-3.5 text-white" />
-                    </div>
-                  </div>
-                  
-                  <span className="mt-2 text-[11px] font-semibold text-neutral-200 tracking-wide text-center bg-neutral-950/80 px-2 py-1 rounded-none border border-neutral-800">
-                    Escazú, Costa Rica
-                  </span>
-                </div>
-
-                <div className="absolute bottom-2 right-2 bg-neutral-950/90 text-white text-[9px] font-bold px-2 py-1 rounded-none flex items-center gap-1 border border-neutral-800 group-hover:bg-editorial-camel group-hover:border-editorial-camel transition-all">
-                  <span>Ver en Google Maps</span>
+                <a
+                  href="https://maps.app.goo.gl/1tzPzERZ9gRcsbDX9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute bottom-2 right-2 bg-neutral-950/90 text-white text-[9px] font-bold px-2.5 py-1.5 rounded-none flex items-center gap-1 border border-neutral-800 hover:bg-editorial-camel hover:border-editorial-camel hover:text-white transition-all cursor-pointer shadow-md"
+                >
+                  <span>Abrir en Google Maps</span>
                   <ExternalLink className="w-2.5 h-2.5" />
-                </div>
-              </a>
+                </a>
+              </div>
             </div>
           </div>
 

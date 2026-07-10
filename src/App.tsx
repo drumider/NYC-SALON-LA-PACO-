@@ -20,7 +20,8 @@ import {
   ShieldCheck,
   Star,
   Users,
-  Smile
+  Smile,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Header from './components/Header';
@@ -30,25 +31,116 @@ import PromoCarousel from './components/PromoCarousel';
 import Footer from './components/Footer';
 import { SERVICES, FAQS, HIGHLIGHTS } from './data';
 import { Service } from './types';
+import { WHY_CHOOSE_CONTENT } from './why-choose/whyChooseData';
 
 // Import image assets directly so Vite can bundle and hash them for production/Vercel
-import heroImg from './assets/images/nyc_salon_hero_1782425071357.jpg';
-import hairImg from './assets/images/nyc_salon_hair_1782425089522.jpg';
-import nailsImg from './assets/images/nyc_salon_nails_1782425099196.jpg';
-import barberImg from './assets/images/nyc_salon_barber_1782425109070.jpg';
+import hairImg from './assets/images/pelo coloracion.png';
+import nailsImg from './assets/images/uñas.png';
+import barberImg from './assets/images/barba.png';
 
 // Real high-quality generated assets
 const SALON_IMAGES = {
-  hero: heroImg,
+  hero: "/inicio/foto_inicio.png", // Located in /public/inicio/ for easy user replacement!
   hair: hairImg,
   nails: nailsImg,
   barber: barberImg,
+  k18: "/productos/k18.png", // Located in the /public folder for easy user replacement!
 };
+
+const PRODUCTS = [
+  {
+    id: "k18",
+    brand: "K18 Hair Science",
+    name: "K18 Damage Shield Conditioner 250 ml",
+    price: "₡18.000",
+    image: "/productos/k18.png",
+    description: "Acondicionador protector que hidrata, fortalece y defiende del daño diario, rayos UV y polución.",
+    benefits: [
+      "Protección contra rayos UV y polución",
+      "Fórmula con K18Peptide™ patentado",
+      "Aporta brillo radiante y sedosidad"
+    ],
+    inStock: true
+  },
+  {
+    id: "biotop",
+    brand: "Biotop Professional",
+    name: "700 Keratin & Kale Mascarilla 250 ml",
+    price: "₡28.000",
+    image: "/productos/biotop.jpg",
+    description: "Tratamiento intensivo con queratina y kale que reconstruye, suaviza y nutre el pelo dañado.",
+    benefits: [
+      "Repara y reconstruye con queratina",
+      "Nutre en profundidad con kale orgánico",
+      "Controla el frizz y devuelve brillo"
+    ],
+    inStock: true
+  },
+  {
+    id: "loreal",
+    brand: "L'Oréal Professionnel",
+    name: "Absolut Repair Shampoo 300 ml",
+    price: "₡18.000",
+    image: "/productos/absolut.jpg",
+    description: "Shampoo restructurante profesional que limpia suavemente, restaura la fibra capilar y devuelve fuerza.",
+    benefits: [
+      "Repara y restructura el cabello dañado",
+      "Nutre con proteína y omega-9",
+      "Aporta suavidad y manejabilidad"
+    ],
+    inStock: true
+  },
+  {
+    id: "biotop_cond",
+    brand: "Biotop Professional",
+    name: "700 Keratin & Kale Acondicionador 250 ml",
+    price: "₡15.000",
+    image: "/productos/biotop_cond.jpg",
+    description: "Acondicionador reparador que fortalece, suaviza, desenreda y restaura la fibra capilar dañada.",
+    benefits: [
+      "Repara y fortalece con queratina",
+      "Nutre con kale orgánico",
+      "Desenreda y suaviza instantáneamente"
+    ],
+    inStock: true
+  },
+  {
+    id: "biotop_19",
+    brand: "Biotop Professional",
+    name: "19 Pro Silver Shampoo Matizador 250 ml",
+    price: "₡19.000",
+    image: "/productos/biotop_19.jpg",
+    description: "Shampoo tonificante violeta que neutraliza tonos amarillos no deseados en cabellos rubios, canos y plateados.",
+    benefits: [
+      "Neutraliza tonos amarillos y anaranjados",
+      "Realza rubios, grises y plateados",
+      "Aporta luminosidad y un acabado frío"
+    ],
+    inStock: true
+  },
+  {
+    id: "biotop_911",
+    brand: "Biotop Professional",
+    name: "911 Quinoa Mascarilla Hidratante 250 ml",
+    price: "₡23.000",
+    image: "/productos/biotop_911.jpg",
+    description: "Mascarilla de tratamiento intensivo con quinoa que restaura la hidratación, nutre en profundidad y devuelve el brillo.",
+    benefits: [
+      "Restaura la hidratación con quinoa",
+      "Suaviza y aporta brillo",
+      "Nutre el cabello seco o apagado",
+      "Deja el pelo más suave y manejable"
+    ],
+    inStock: true
+  }
+];
 
 export default function App() {
   const [selectedServices, setSelectedServices] = useState<Service[]>([]);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('todos');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [showAllServices, setShowAllServices] = useState(false);
 
   // Manage selection
   const handleToggleService = (service: Service) => {
@@ -76,17 +168,14 @@ export default function App() {
     if (lowerTitle.includes('uña')) {
       setActiveCategoryFilter('uñas');
       scrollToSection('servicios');
-    } else if (lowerTitle.includes('capaci')) {
-      setActiveCategoryFilter('capacitacion');
-      scrollToSection('servicios');
     } else if (lowerTitle.includes('trata') || lowerTitle.includes('cabello')) {
       setActiveCategoryFilter('cabello');
       scrollToSection('servicios');
-    } else if (lowerTitle.includes('barber')) {
+    } else if (lowerTitle.includes('barber') || lowerTitle.includes('barba')) {
       setActiveCategoryFilter('barberia');
       scrollToSection('servicios');
     } else if (lowerTitle.includes('contact') || lowerTitle.includes('reser')) {
-      scrollToSection('cotizador');
+      setIsBookingModalOpen(true);
     }
   };
 
@@ -106,6 +195,7 @@ export default function App() {
   // Format colon currency helper
   const totalSelectedPrice = selectedServices.reduce((acc, curr) => acc + curr.price, 0);
   const formatPrice = (val: number) => {
+    if (val === 0) return 'Por Consultar';
     return new Intl.NumberFormat('es-CR', {
       style: 'currency',
       currency: 'CRC',
@@ -129,7 +219,7 @@ export default function App() {
     <div className="bg-[#FAF7F5] text-neutral-800 font-sans min-h-screen relative overflow-x-hidden selection:bg-editorial-camel/20 selection:text-editorial-charcoal">
       
       {/* Header */}
-      <Header />
+      <Header onOpenBooking={() => setIsBookingModalOpen(true)} />
 
       {/* Hero Section */}
       <section id="inicio" className="relative pt-6 pb-20 md:py-24 lg:py-32 overflow-hidden bg-editorial-sand border-b border-black/5">
@@ -166,8 +256,8 @@ export default function App() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <button
-                onClick={() => scrollToSection('cotizador')}
-                className="bg-editorial-charcoal text-white hover:bg-editorial-camel hover:text-white font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-xs flex items-center justify-center gap-2 group"
+                onClick={() => setIsBookingModalOpen(true)}
+                className="bg-editorial-charcoal text-white hover:bg-editorial-camel hover:text-white font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-none transition-colors shadow-xs flex items-center justify-center gap-2 group cursor-pointer"
               >
                 Reservar Mi Cita <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -213,11 +303,11 @@ export default function App() {
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   <div className="flex flex-col">
                     <span className="text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Llámanos Hoy</span>
-                    <span className="text-sm font-bold text-editorial-charcoal">Tel: 4034-5687</span>
+                    <span className="text-sm font-bold text-editorial-charcoal">Tel: 7104-9478</span>
                   </div>
                 </div>
                 <a
-                  href="tel:40345687"
+                  href="tel:71049478"
                   className="bg-editorial-charcoal hover:bg-editorial-camel text-white text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-none transition-colors shadow-xs"
                 >
                   Llamar
@@ -271,120 +361,58 @@ export default function App() {
           
           {/* Header */}
           <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <span className="text-editorial-camel text-[10px] font-bold uppercase tracking-widest font-sans">Elegancia & Excelencia</span>
+            <span className="text-editorial-camel text-[10px] font-bold uppercase tracking-widest font-sans">
+              {WHY_CHOOSE_CONTENT.sectionSubtitle}
+            </span>
             <h2 className="font-display font-medium text-3xl md:text-4xl text-editorial-charcoal tracking-tight leading-tight">
-              ¿Por qué elegir NYC Salón Beauty Supply?
+              {WHY_CHOOSE_CONTENT.sectionTitle}
             </h2>
             <p className="text-xs md:text-sm text-neutral-600">
-              Diseñamos servicios personalizados utilizando marcas de calibre profesional y formulaciones orgánicas para un resultado sublime y respetuoso.
+              {WHY_CHOOSE_CONTENT.sectionDescription}
             </p>
           </div>
 
           {/* Specialties Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            {/* Color specialists card */}
-            <div className="bg-white rounded-none border border-black/5 overflow-hidden shadow-xs group hover:border-editorial-camel/30 transition-all flex flex-col justify-between">
-              <div>
-                <div className="aspect-[4/3] w-full overflow-hidden relative">
-                  <img
-                    src={SALON_IMAGES.hair}
-                    alt="Especialistas en Color"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-4 left-4 bg-editorial-charcoal text-editorial-camel text-[9px] font-bold px-3 py-1 rounded-none uppercase tracking-widest">
-                    Color & Estilo
+            {WHY_CHOOSE_CONTENT.cards.map((card) => (
+              <div
+                key={card.id}
+                className="bg-white rounded-none border border-black/5 overflow-hidden shadow-xs group hover:border-editorial-camel/30 transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="aspect-[4/3] w-full overflow-hidden relative">
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute top-4 left-4 bg-editorial-charcoal text-editorial-camel text-[9px] font-bold px-3 py-1 rounded-none uppercase tracking-widest">
+                      {card.categoryTag}
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-2">
+                    <h3 className="font-display font-semibold text-lg text-editorial-charcoal">
+                      {card.title}
+                    </h3>
+                    <p className="text-xs text-neutral-600 leading-relaxed">
+                      {card.description}
+                    </p>
                   </div>
                 </div>
-                <div className="p-6 space-y-2">
-                  <h3 className="font-display font-semibold text-lg text-editorial-charcoal">Especialistas en Color</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">
-                    Balayage, babylights, platinados y correcciones de color. Nuestro enfoque es lograr el tono soñado manteniendo la estructura de tu cabello impecablemente saludable.
-                  </p>
+                <div className="px-6 pb-6 pt-2">
+                  <button
+                    onClick={() => {
+                      setActiveCategoryFilter(card.categoryFilter);
+                      scrollToSection('servicios');
+                    }}
+                    className="text-[10px] uppercase tracking-widest font-bold text-editorial-camel hover:text-editorial-charcoal flex items-center gap-1 group cursor-pointer"
+                  >
+                    {card.buttonText} <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </button>
                 </div>
               </div>
-              <div className="px-6 pb-6 pt-2">
-                <button
-                  onClick={() => {
-                    setActiveCategoryFilter('cabello');
-                    scrollToSection('servicios');
-                  }}
-                  className="text-[10px] uppercase tracking-widest font-bold text-editorial-camel hover:text-editorial-charcoal flex items-center gap-1 group cursor-pointer"
-                >
-                  Ver Colorimetría <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
-
-            {/* Nails card */}
-            <div className="bg-white rounded-none border border-black/5 overflow-hidden shadow-xs group hover:border-editorial-camel/30 transition-all flex flex-col justify-between">
-              <div>
-                <div className="aspect-[4/3] w-full overflow-hidden relative">
-                  <img
-                    src={SALON_IMAGES.nails}
-                    alt="Manicura y Pedicura Premium"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-4 left-4 bg-editorial-charcoal text-editorial-camel text-[9px] font-bold px-3 py-1 rounded-none uppercase tracking-widest">
-                    Uñas & Nail Art
-                  </div>
-                </div>
-                <div className="p-6 space-y-2">
-                  <h3 className="font-display font-semibold text-lg text-editorial-charcoal">Uñas Acrílicas & Gel</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">
-                    Uñas acrílicas esculpidas, semipermanente, esmaltado en gel y exclusivos diseños a mano alzada. Tu manicura se convertirá en un accesorio de moda de larga duración.
-                  </p>
-                </div>
-              </div>
-              <div className="px-6 pb-6 pt-2">
-                <button
-                  onClick={() => {
-                    setActiveCategoryFilter('uñas');
-                    scrollToSection('servicios');
-                  }}
-                  className="text-[10px] uppercase tracking-widest font-bold text-editorial-camel hover:text-editorial-charcoal flex items-center gap-1 group cursor-pointer"
-                >
-                  Ver Diseños <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
-
-            {/* Barber card */}
-            <div className="bg-white rounded-none border border-black/5 overflow-hidden shadow-xs group hover:border-editorial-camel/30 transition-all flex flex-col justify-between">
-              <div>
-                <div className="aspect-[4/3] w-full overflow-hidden relative">
-                  <img
-                    src={SALON_IMAGES.barber}
-                    alt="Barbería Caballero"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-4 left-4 bg-editorial-charcoal text-editorial-camel text-[9px] font-bold px-3 py-1 rounded-none uppercase tracking-widest">
-                    Barbería Profesional
-                  </div>
-                </div>
-                <div className="p-6 space-y-2">
-                  <h3 className="font-display font-semibold text-lg text-editorial-charcoal">Corte & Cuidado de Barba</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">
-                    Un espacio dedicado para caballeros. Cortes clásicos y modernos, y rituales tradicionales de barba con toalla caliente y productos que estimulan la piel y el vello facial.
-                  </p>
-                </div>
-              </div>
-              <div className="px-6 pb-6 pt-2">
-                <button
-                  onClick={() => {
-                    setActiveCategoryFilter('barberia');
-                    scrollToSection('servicios');
-                  }}
-                  className="text-[10px] uppercase tracking-widest font-bold text-editorial-camel hover:text-editorial-charcoal flex items-center gap-1 group cursor-pointer"
-                >
-                  Ver Barbería <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
-
+            ))}
           </div>
         </div>
       </section>
@@ -409,14 +437,16 @@ export default function App() {
             <div className="flex flex-wrap gap-2">
               {[
                 { id: 'todos', label: 'Todos' },
-                { id: 'cabello', label: 'Cabello & Color' },
+                { id: 'cabello', label: 'Cabello & Estilo' },
                 { id: 'uñas', label: 'Uñas & Gel' },
-                { id: 'barberia', label: 'Barbería' },
-                { id: 'capacitacion', label: 'Capacitaciones' }
+                { id: 'barberia', label: 'Barbería' }
               ].map(tab => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveCategoryFilter(tab.id)}
+                  onClick={() => {
+                    setActiveCategoryFilter(tab.id);
+                    setShowAllServices(false);
+                  }}
                   className={`text-[10px] uppercase tracking-widest font-bold px-4 py-2.5 rounded-none border transition-all cursor-pointer ${
                     activeCategoryFilter === tab.id
                       ? 'bg-editorial-charcoal text-white border-editorial-charcoal'
@@ -431,7 +461,7 @@ export default function App() {
 
           {/* Catalog Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredServices.map(service => {
+            {(showAllServices ? filteredServices : filteredServices.slice(0, 9)).map(service => {
               const isSelected = selectedServices.some(s => s.id === service.id);
               return (
                 <ServiceCard
@@ -444,6 +474,28 @@ export default function App() {
             })}
           </div>
 
+          {/* View More / View Less Toggle Button */}
+          {filteredServices.length > 9 && (
+            <div className="flex justify-center pt-4">
+              <button
+                onClick={() => setShowAllServices(!showAllServices)}
+                className="flex items-center gap-2 bg-white hover:bg-[#FAF7F5] text-editorial-charcoal border border-neutral-200 hover:border-editorial-camel text-[10px] uppercase tracking-widest font-bold px-6 py-3 transition-all duration-300 cursor-pointer"
+              >
+                {showAllServices ? (
+                  <>
+                    Mostrar menos servicios
+                    <ChevronDown className="w-4 h-4 transition-transform duration-300 rotate-180 text-editorial-camel" />
+                  </>
+                ) : (
+                  <>
+                    Ver más servicios (+{filteredServices.length - 9} disponibles)
+                    <ChevronDown className="w-4 h-4 transition-transform duration-300 text-editorial-camel" />
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
           {/* Quick Notice */}
           <div className="bg-editorial-sand rounded-none p-5 border border-editorial-camel/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
             <div className="flex items-center gap-2 text-editorial-charcoal">
@@ -451,7 +503,7 @@ export default function App() {
               <span className="font-medium">¿No encuentras el servicio capilar o diseño exacto? Contáctanos y cotizamos tu requerimiento a la medida.</span>
             </div>
             <button
-              onClick={() => scrollToSection('cotizador')}
+              onClick={() => setIsBookingModalOpen(true)}
               className="bg-editorial-charcoal hover:bg-editorial-camel text-white text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded-none transition-colors shrink-0 cursor-pointer"
             >
               Consultar Personalizado
@@ -467,63 +519,103 @@ export default function App() {
         </div>
       </section>
 
-      {/* Quote Estimator / Interactive Booking Section */}
-      <section className="py-20 bg-[#FAF7F5] relative overflow-hidden border-b border-black/5">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* Products Section */}
+      <section id="productos" className="py-20 bg-white border-b border-black/5">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 space-y-12">
           
-          {/* Booking Left description side */}
-          <div className="lg:col-span-5 space-y-8 flex flex-col justify-center">
-            <div className="space-y-4">
-              <span className="text-editorial-camel text-[10px] font-bold uppercase tracking-widest font-sans">Reservas Prácticas</span>
-              <h2 className="font-display font-medium text-3xl md:text-4xl text-editorial-charcoal tracking-tight leading-none">
-                Tu Experiencia Premium en NYC Salón
-              </h2>
-              <p className="text-xs md:text-sm text-neutral-600 leading-relaxed font-sans">
-                Queremos consentirte desde el primer instante. Rellena el cotizador con los servicios deseados y enviaremos una reserva directa a nuestro WhatsApp. Te confirmaremos tu hora y estilista en cuestión de minutos.
-              </p>
-            </div>
-
-            {/* List of benefits */}
-            <div className="space-y-4 text-xs font-medium">
-              {[
-                { title: 'Estilistas Certificados', desc: 'Atención personalizada por especialistas liderados por Gilma Hernández.' },
-                { title: 'Productos Orgánicos & Premium', desc: 'Fórmulas cuidadosas libres de tóxicos que protegen tu salud capilar.' },
-                { title: 'Ubicación Estratégica', desc: 'En Calle Guachipelín, Escazú. Parqueo privado seguro y gratuito.' },
-                { title: 'Amenities Relax', desc: 'Disfruta de café premium, té relajante o agua fresca mientras te consentimos.' }
-              ].map((benefit, idx) => (
-                <div key={idx} className="flex gap-3">
-                  <div className="w-5 h-5 rounded-none bg-editorial-camel/10 text-editorial-camel flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-3 h-3" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-editorial-charcoal font-display">{benefit.title}</h4>
-                    <p className="text-neutral-500 font-normal mt-0.5 font-sans">{benefit.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Trust badge */}
-            <div className="flex items-center gap-3 bg-white p-4 rounded-none border border-black/5 shadow-xs max-w-sm">
-              <ShieldCheck className="w-8 h-8 text-editorial-camel shrink-0" />
-              <div className="text-xs font-sans">
-                <p className="font-bold text-editorial-charcoal">Reserva 100% Segura</p>
-                <p className="text-neutral-500">Sin pagos anticipados. Cancelas directamente en el salón de belleza.</p>
-              </div>
-            </div>
+          {/* Section Header */}
+          <div className="text-center space-y-2">
+            <span className="text-editorial-camel text-[10px] font-bold uppercase tracking-widest font-sans">Boutique Profesional</span>
+            <h2 className="font-display font-medium text-3xl md:text-4xl text-editorial-charcoal tracking-tight leading-tight">
+              Línea de Productos Premium
+            </h2>
+            <p className="text-xs text-neutral-600 max-w-xl mx-auto font-sans">
+              Lleva el cuidado de salón a la comodidad de tu hogar con fórmulas exclusivas de alta gama, recomendadas por nuestros expertos en color.
+            </p>
           </div>
 
-          {/* Booking right form side */}
-          <div className="lg:col-span-7">
-            <EstimatorForm
-              selectedServices={selectedServices}
-              onRemoveService={handleRemoveServiceId}
-              onClearServices={handleClearAllSelected}
-            />
+          {/* Product Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 max-w-7xl mx-auto">
+            {PRODUCTS.map((product) => (
+              <div 
+                key={product.id}
+                className="group flex flex-col bg-[#FAF7F5] border border-black/10 hover:border-editorial-camel/40 hover:shadow-md transition-all duration-300 rounded-none overflow-hidden"
+              >
+                {/* Product Image */}
+                <div className="aspect-square w-full bg-white overflow-hidden border-b border-black/5 relative">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+
+                {/* Product Info */}
+                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-editorial-camel text-[8px] font-bold uppercase tracking-widest font-sans">
+                        {product.brand}
+                      </span>
+                      <span className="text-[8px] text-emerald-600 font-bold uppercase tracking-widest font-sans flex items-center gap-1">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> En Stock
+                      </span>
+                    </div>
+
+                    <h3 className="font-display font-semibold text-xs text-editorial-charcoal line-clamp-2 min-h-[2rem] leading-tight">
+                      {product.name}
+                    </h3>
+
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="font-sans font-bold text-base text-editorial-charcoal">{product.price}</span>
+                      <span className="text-[8px] text-neutral-400 font-sans">IVA Incluido</span>
+                    </div>
+
+                    <p className="text-[11px] text-neutral-500 leading-relaxed font-sans line-clamp-2">
+                      {product.description}
+                    </p>
+                  </div>
+
+                  {/* Benefits mini list */}
+                  <div className="space-y-1 pt-2 border-t border-black/5">
+                    {product.benefits.map((benefit, i) => (
+                      <div key={i} className="flex items-center gap-1 text-[10px] text-neutral-600">
+                        <Check className="w-2.5 h-2.5 text-editorial-camel shrink-0" />
+                        <span className="truncate">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="space-y-1.5 pt-2">
+                    <a
+                      href={`https://wa.me/50671049478?text=${encodeURIComponent(`Hola NYC Salón Beauty Supply! Me interesa comprar el producto ${product.name} que vi en su sitio web.`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-editorial-charcoal text-white hover:bg-editorial-camel hover:text-white font-bold text-[9px] uppercase tracking-widest py-2 rounded-none transition-colors text-center shadow-xs flex items-center justify-center gap-1 cursor-pointer"
+                    >
+                      Comprar WhatsApp <ArrowRight className="w-2.5 h-2.5" />
+                    </a>
+                    <button
+                      onClick={() => {
+                        const msg = `Hola! Quisiera reservar para retirar en el salón el producto ${product.name} (${product.price}).`;
+                        window.open(`https://wa.me/50671049478?text=${encodeURIComponent(msg)}`, '_blank');
+                      }}
+                      className="w-full border border-editorial-charcoal text-editorial-charcoal hover:bg-editorial-charcoal hover:text-white font-bold text-[9px] uppercase tracking-widest py-1.5 rounded-none transition-colors text-center cursor-pointer"
+                    >
+                      Reservar Retiro
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
         </div>
       </section>
+
+
 
       {/* Accordion FAQ Section */}
       <section className="py-20 bg-white">
@@ -612,13 +704,56 @@ export default function App() {
                 Limpiar
               </button>
               <button
-                onClick={() => scrollToSection('cotizador')}
+                onClick={() => setIsBookingModalOpen(true)}
                 className="bg-editorial-camel hover:bg-white hover:text-editorial-camel text-[10px] font-bold uppercase tracking-widest py-2.5 px-4 rounded-none transition-colors duration-200 border border-editorial-camel flex items-center gap-1 cursor-pointer"
               >
                 Cotizar Ahora <ArrowRight className="w-3 h-3" />
               </button>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Booking Modal Popup */}
+      <AnimatePresence>
+        {isBookingModalOpen && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsBookingModalOpen(false)}
+              className="fixed inset-0 bg-editorial-charcoal/60 backdrop-blur-sm"
+            />
+            
+            {/* Modal Box */}
+            <div className="flex min-h-screen items-center justify-center p-4 relative pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: 'spring', duration: 0.5, bounce: 0.15 }}
+                className="relative w-full max-w-2xl bg-white shadow-2xl border border-black/10 pointer-events-auto overflow-hidden"
+              >
+                {/* Close Button */}
+                <button
+                  onClick={() => setIsBookingModalOpen(false)}
+                  className="absolute top-5 right-5 z-50 p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+                  aria-label="Cerrar"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                {/* Form wrapper */}
+                <EstimatorForm
+                  selectedServices={selectedServices}
+                  onRemoveService={handleRemoveServiceId}
+                  onClearServices={handleClearAllSelected}
+                />
+              </motion.div>
+            </div>
+          </div>
         )}
       </AnimatePresence>
 

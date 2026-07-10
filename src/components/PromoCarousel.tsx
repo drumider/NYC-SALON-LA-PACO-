@@ -32,7 +32,7 @@ export default function PromoCarousel() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 max-w-4xl mx-auto w-full">
         {PROMOS.map((promo) => (
           <div
             key={promo.id}

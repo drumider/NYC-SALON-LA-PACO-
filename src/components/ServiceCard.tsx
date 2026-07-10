@@ -17,6 +17,7 @@ interface ServiceCardProps {
 export default function ServiceCard({ service, isSelected, onToggleSelect }: ServiceCardProps) {
   // Format price helper (Colon ₡)
   const formatPrice = (val: number) => {
+    if (val === 0) return 'Por Consultar';
     return new Intl.NumberFormat('es-CR', {
       style: 'currency',
       currency: 'CRC',
