@@ -15,6 +15,7 @@ import {
   Clock,
   ArrowRight,
   ChevronDown,
+  ChevronUp,
   Check,
   Award,
   ShieldCheck,
@@ -647,6 +648,7 @@ export default function App() {
   const [showAllServices, setShowAllServices] = useState(false);
   const [activeProductCategory, setActiveProductCategory] = useState<string>('todos');
   const [productSearchQuery, setProductSearchQuery] = useState<string>('');
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
   // Manage selection
   const handleToggleService = (service: Service) => {
@@ -1179,6 +1181,9 @@ export default function App() {
               return sectionsWithProducts.map(catId => {
                 const sectionMeta = SECTION_METADATA[catId];
                 const sectionProducts = filteredProducts.filter(p => p.category === catId);
+                const isExpanded = !!expandedCategories[catId];
+                const displayedProducts = isExpanded ? sectionProducts : sectionProducts.slice(0, 4);
+                const hasMore = sectionProducts.length > 4;
 
                 return (
                   <div key={catId} className="space-y-6 scroll-mt-24">
@@ -1203,7 +1208,7 @@ export default function App() {
 
                     {/* Products Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                      {sectionProducts.map((product) => (
+                      {displayedProducts.map((product) => (
                         <div 
                           key={product.id}
                           className="group flex flex-col bg-white border border-neutral-200 hover:border-editorial-camel/60 hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden p-4 relative"
@@ -1294,6 +1299,31 @@ export default function App() {
                         </div>
                       ))}
                     </div>
+
+                    {/* Show more / Ver más button if there are more than 4 products in this category */}
+                    {hasMore && (
+                      <div className="flex justify-center pt-4">
+                        <button
+                          onClick={() => {
+                            setExpandedCategories(prev => ({
+                              ...prev,
+                              [catId]: !isExpanded
+                            }));
+                          }}
+                          className="bg-white border border-neutral-300 hover:border-editorial-camel text-neutral-700 hover:text-editorial-camel text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5"
+                        >
+                          {isExpanded ? (
+                            <>
+                              Ver menos <ChevronUp className="w-4 h-4 text-editorial-camel" />
+                            </>
+                          ) : (
+                            <>
+                              Ver más productos (+{sectionProducts.length - 4}) <ChevronDown className="w-4 h-4 text-editorial-camel" />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
 
                   </div>
                 );
