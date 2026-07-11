@@ -31,3 +31,16 @@ export interface AppointmentEstimate {
   notes: string;
   hairLength?: 'corto' | 'mediano' | 'largo';
 }
+
+export interface Product {
+  id: string;
+  brand: string;
+  name: string;
+  price: string;
+  image: string;
+  description: string;
+  benefits: string[];
+  inStock: boolean;
+  category: 'shampoo' | 'mascarilla' | 'acondicionador' | 'estilizado' | 'corporal';
+}
+

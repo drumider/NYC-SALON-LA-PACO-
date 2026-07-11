@@ -21,7 +21,10 @@ import {
   Star,
   Users,
   Smile,
-  X
+  X,
+  Search,
+  Droplet,
+  SlidersHorizontal
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Header from './components/Header';
@@ -30,13 +33,44 @@ import EstimatorForm from './components/EstimatorForm';
 import PromoCarousel from './components/PromoCarousel';
 import Footer from './components/Footer';
 import { SERVICES, FAQS, HIGHLIGHTS } from './data';
-import { Service } from './types';
+import { Service, Product } from './types';
 import { WHY_CHOOSE_CONTENT } from './why-choose/whyChooseData';
 
 // Import image assets directly so Vite can bundle and hash them for production/Vercel
 import hairImg from './assets/images/pelo coloracion.png';
 import nailsImg from './assets/images/uñas.png';
 import barberImg from './assets/images/barba.png';
+import yellowConditionerImg from './assets/images/yellow_conditioner_1783693016417.png';
+import yellowShampooImg from './assets/images/yellow_shampoo_1783693103821.png';
+import semiDiLinoShampooImg from './assets/images/semi_di_lino_shampoo_1783693170354.jpg';
+import semiDiLinoCristalliImg from './assets/images/semi_di_lino_cristalli_1783693250000_1783693329201.jpg';
+import yellowDetoxCreamImg from './assets/images/yellow_detox_cream_1783693424338.jpg';
+import yellowLissSerumImg from './assets/images/yellow_liss_serum_1783693529687.jpg';
+import yellowCurlsShampooImg from './assets/images/yellow_curls_shampoo_1783693621452.jpg';
+import yellowScalpShampooImg from './assets/images/yellow_scalp_shampoo_1783693759717.jpg';
+import yellowComfortShampooImg from './assets/images/yellow_comfort_shampoo_1783693829347.jpg';
+import yellowEnergyShampooImg from './assets/images/yellow_energy_shampoo_1783693936922.jpg';
+import yellowNourishingShampooImg from './assets/images/yellow_nourish_small_1783728795074.jpg';
+import cadiveuConditionerImg from './assets/images/cadiveu_brasil_cacau_conditioner_1783729878381.jpg';
+import cadiveuPrimerImg from './assets/images/cadiveu_primer_110ml_1783729959143.jpg';
+import cadiveuShampooImg from './assets/images/cadiveu_shampoo_300ml_1783730033540.jpg';
+import moroccanoilBodyScrubImg from './assets/images/moroccanoil_body_scrub_1783730117809.jpg';
+import lorealMetalDetoxMaskImg from './assets/images/loreal_metal_detox_mask_1783730202272.jpg';
+import moroccanoilHydratingMaskImg from './assets/images/moroccanoil_hydrating_mask_1783730317153.jpg';
+import biokeraYellowShotCurlyCreamImg from './assets/images/biokera_yellow_shot_curly_cream_1783730519066.jpg';
+import salermWheatGermMaskImg from './assets/images/salerm_wheat_germ_mask_1783730630431.jpg';
+import biokeraYellowShotMaskImg from './assets/images/biokera_yellow_shot_mask_1783730792617.jpg';
+import biokeraGreenShotBalsamImg from './assets/images/biokera_green_shot_balsam_1783730802190.jpg';
+import biokeraOilyHairShampooImg from './assets/images/biokera_oily_hair_shampoo_1783730813496.jpg';
+import biokeraOilyHairMaskImg from './assets/images/biokera_oily_hair_mask_1783730821120.jpg';
+import biokeraDandruffMaskImg from './assets/images/biokera_dandruff_mask_1783730981435.jpg';
+import lorealSilverShampooImg from './assets/images/loreal_silver_shampoo_1783731191889.jpg';
+import lorealSilverConditionerImg from './assets/images/loreal_silver_conditioner_1783731200845.jpg';
+import tecItalyDueFaccettaGiornoImg from './assets/images/tec_italy_due_faccetta_giorno_per_giorno_1783731222939.jpg';
+import tecItalyScultoreFineImg from './assets/images/tec_italy_scultore_fine_1783731238180.jpg';
+import tecItalyDueFaccettaMassimoImg from './assets/images/tec_italy_due_faccetta_massimo_1783731321947.jpg';
+import lorealAbsolutRepairConditionerImg from './assets/images/loreal_absolut_repair_conditioner_1783731395869.jpg';
+import lorealVitaminoColorShampooImg from './assets/images/loreal_vitamino_color_shampoo_1783731445278.jpg';
 
 // Real high-quality generated assets
 const SALON_IMAGES = {
@@ -46,8 +80,7 @@ const SALON_IMAGES = {
   barber: barberImg,
   k18: "/productos/k18.png", // Located in the /public folder for easy user replacement!
 };
-
-const PRODUCTS = [
+const PRODUCTS: Product[] = [
   {
     id: "k18",
     brand: "K18 Hair Science",
@@ -60,7 +93,8 @@ const PRODUCTS = [
       "Fórmula con K18Peptide™ patentado",
       "Aporta brillo radiante y sedosidad"
     ],
-    inStock: true
+    inStock: true,
+    category: "acondicionador"
   },
   {
     id: "biotop",
@@ -74,7 +108,8 @@ const PRODUCTS = [
       "Nutre en profundidad con kale orgánico",
       "Controla el frizz y devuelve brillo"
     ],
-    inStock: true
+    inStock: true,
+    category: "mascarilla"
   },
   {
     id: "loreal",
@@ -88,7 +123,8 @@ const PRODUCTS = [
       "Nutre con proteína y omega-9",
       "Aporta suavidad y manejabilidad"
     ],
-    inStock: true
+    inStock: true,
+    category: "shampoo"
   },
   {
     id: "biotop_cond",
@@ -102,7 +138,8 @@ const PRODUCTS = [
       "Nutre con kale orgánico",
       "Desenreda y suaviza instantáneamente"
     ],
-    inStock: true
+    inStock: true,
+    category: "acondicionador"
   },
   {
     id: "biotop_19",
@@ -116,7 +153,8 @@ const PRODUCTS = [
       "Realza rubios, grises y plateados",
       "Aporta luminosidad y un acabado frío"
     ],
-    inStock: true
+    inStock: true,
+    category: "shampoo"
   },
   {
     id: "biotop_911",
@@ -131,7 +169,473 @@ const PRODUCTS = [
       "Nutre el cabello seco o apagado",
       "Deja el pelo más suave y manejable"
     ],
-    inStock: true
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "yellow_color_care",
+    brand: "Yellow Professional",
+    name: "Yellow Maintenance Conditioner - Color Care 500 ml",
+    price: "₡23.000",
+    image: yellowConditionerImg,
+    description: "Acondicionador profesional para el mantenimiento del cabello teñido. Protege la intensidad del color y aporta suavidad.",
+    benefits: [
+      "Protección y fijación de color prolongada",
+      "Aporta suavidad extrema y desenredo dócil",
+      "Fórmula profesional Color-Lock & Pro-Shine"
+    ],
+    inStock: true,
+    category: "acondicionador"
+  },
+  {
+    id: "yellow_shampoo_color_care",
+    brand: "Yellow Professional",
+    name: "Yellow Maintenance Shampoo - Color Care 500 ml",
+    price: "₡23.000",
+    image: yellowShampooImg,
+    description: "Champú profesional de limpieza suave para cabellos teñidos. Mantiene vivo el reflejo del color por más tiempo y aporta brillo excepcional.",
+    benefits: [
+      "Limpieza delicada sin agredir el color",
+      "Mantiene el reflejo brillante y vibrante",
+      "Fórmula enriquecida con complejo Color-Lock"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "semi_di_lino_balancing",
+    brand: "Alfaparf Milano",
+    name: "Semi di Lino Scalp Rebalance - Balancing Low Shampoo 250 ml",
+    price: "₡18.000",
+    image: semiDiLinoShampooImg,
+    description: "Champú delicado equilibrante para el cuero cabelludo graso. Limpia profundamente, regula el exceso de sebo y refresca.",
+    benefits: [
+      "Fórmula libre de sulfatos (Sulfate-Free)",
+      "Regula la sobreproducción de grasa y sebo",
+      "Efecto refrescante de larga duración"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "semi_di_lino_cristalli",
+    brand: "Alfaparf Milano",
+    name: "Semi di Lino Sublime - Cristalli Liquidi The Original 30 ml",
+    price: "₡18.000",
+    image: semiDiLinoCristalliImg,
+    description: "Sérum perfeccionador instantáneo para todo tipo de cabello. Aporta un brillo infinito, protege contra el calor y previene las puntas abiertas.",
+    benefits: [
+      "Brillo sublime e inmediato",
+      "Protección térmica contra el calor hasta 230°C",
+      "Efecto seda al tacto y control del frizz"
+    ],
+    inStock: true,
+    category: "estilizado"
+  },
+  {
+    id: "yellow_detox_cream",
+    brand: "Yellow Professional",
+    name: "Yellow Detox Cream - Scalp and Hair Wellness Boost 250 ml",
+    price: "₡22.000",
+    image: yellowDetoxCreamImg,
+    description: "Crema desintoxicante capilar y del cuero cabelludo con Rambután. Captura metales pesados y cloro, aportando frescura, hidratación y acondicionamiento.",
+    benefits: [
+      "Acción desintoxicante profunda para cuero cabelludo y fibra",
+      "Enriquecido con Rambután 100% de origen natural",
+      "Acondiciona, hidrata y brinda bienestar absoluto"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "yellow_liss_serum",
+    brand: "Yellow Professional",
+    name: "Yellow Liss Multi-Benefit - 10-in-1 Smoothing Serum 150 ml",
+    price: "₡13.000",
+    image: yellowLissSerumImg,
+    description: "Sérum alisador multitarea 10 en 1 para cabellos rebeldes o alisados. Aporta control del encrespamiento, brillo deslumbrante, sedosidad y protección térmica.",
+    benefits: [
+      "10 beneficios en 1 solo producto profesional",
+      "Efecto alisador progresivo y control absoluto del frizz",
+      "Protección térmica contra herramientas de calor"
+    ],
+    inStock: true,
+    category: "estilizado"
+  },
+  {
+    id: "yellow_curls_shampoo",
+    brand: "Yellow Professional",
+    name: "Yellow Curls Low Shampoo - Curly Hair 500 ml",
+    price: "₡23.000",
+    image: yellowCurlsShampooImg,
+    description: "Champú hidratante y anti-frizz libre de sulfatos diseñado especialmente para cabellos rizados y ondulados. Con Aceite de Baobab y Mango.",
+    benefits: [
+      "Limpieza delicada que preserva la hidratación natural de los rizos",
+      "Definición perfecta, elasticidad y control absoluto del frizz",
+      "Enriquecido con Aceite de Baobab y Mango 100% naturales"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "yellow_scalp_balance",
+    brand: "Yellow Professional",
+    name: "Yellow Scalp Balance Shampoo - Oily Scalp 500 ml",
+    price: "₡23.000",
+    image: yellowScalpShampooImg,
+    description: "Champú profesional seborregulador formulado para el cuero cabelludo graso. Purifica en profundidad aportando frescor y vitalidad.",
+    benefits: [
+      "Regula el exceso de sebo y grasa de forma equilibrada",
+      "Enriquecido con Rambután and Enebro de origen natural",
+      "Limpieza refrescante de larga duración y vitalidad capilar"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "yellow_scalp_comfort",
+    brand: "Yellow Professional",
+    name: "Yellow Scalp Comfort Shampoo - Sensitive Scalp 500 ml",
+    price: "₡23.000",
+    image: yellowComfortShampooImg,
+    description: "Champú calmante profesional para cuero cabelludo sensible. Limpia con delicadeza, reduce rojeces y proporciona un alivio reconfortante inmediato.",
+    benefits: [
+      "Alivio inmediato y reducción de la irritación del cuero cabelludo",
+      "Formulado con Rambután y Jengibre 100% de origen natural",
+      "Limpia suavemente mientras hidrata y protege la fibra"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "yellow_scalp_energy",
+    brand: "Yellow Professional",
+    name: "Yellow Scalp Energy Shampoo - Hair Loss Prevention 500 ml",
+    price: "₡23.000",
+    image: yellowEnergyShampooImg,
+    description: "Champú fortificante anticaída profesional. Estimula el cuero cabelludo, fortalece la fibra capilar desde la raíz y previene la caída del cabello.",
+    benefits: [
+      "Fórmula fortificante que estimula el crecimiento del cabello",
+      "Enriquecido con Rambután y Albahaca 100% naturales",
+      "Aporta energía, densidad, cuerpo y vitalidad al cabello débil"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "yellow_nourishing_shampoo",
+    brand: "Yellow Professional",
+    name: "Yellow Nutritive Nourishing Shampoo - Dry Hair 500 ml",
+    price: "₡23.000",
+    image: yellowNourishingShampooImg,
+    description: "Champú nutritivo profesional para cabello seco. Limpia con delicadeza mientras nutre e hidrata en profundidad, aportando suavidad y brillo extraordinarios.",
+    benefits: [
+      "Nutre e hidrata intensamente la fibra capilar sin apelmazar",
+      "Enriquecido con Aceite de Argán y Aceite de Coco 100% naturales",
+      "Aporta un brillo radiante, sedosidad al tacto y máxima manejabilidad"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "cadiveu_brasil_cacau_conditioner",
+    brand: "Cadiveu Professional",
+    name: "Brasil Cacau Anti Frizz Conditioner 300 ml",
+    price: "₡17.000",
+    image: cadiveuConditionerImg,
+    description: "Acondicionador anti-frizz de uso diario para cabellos rebeldes y encrespados. Formulado con Queratina, Cacau y D-Pantenol para un cabello liso, suave y brillante.",
+    benefits: [
+      "Control absoluto del frizz y efecto liso duradero",
+      "Fórmula enriquecida con Queratina, Cacau y D-Pantenol",
+      "Aporta suavidad extrema, sedosidad y brillo radiante"
+    ],
+    inStock: true,
+    category: "acondicionador"
+  },
+  {
+    id: "cadiveu_brasil_cacau_primer",
+    brand: "Cadiveu Professional",
+    name: "Brasil Cacau Primer Pre-Styling Leave-In 110 ml",
+    price: "₡14.000",
+    image: cadiveuPrimerImg,
+    description: "Tratamiento pre-peinado leave-in multifuncional con protección térmica. Crea una barrera protectora contra la humedad y el daño térmico, eliminando el frizz y aportando brillo.",
+    benefits: [
+      "Protección térmica de alto rendimiento y anti-humedad",
+      "Fórmula leave-in ligera con Queratina, Cacau y D-Pantenol",
+      "Facilita el peinado, elimina el frizz y aporta brillo sedoso"
+    ],
+    inStock: true,
+    category: "estilizado"
+  },
+  {
+    id: "cadiveu_brasil_cacau_shampoo",
+    brand: "Cadiveu Professional",
+    name: "Brasil Cacau Anti Frizz Shampoo 300 ml",
+    price: "₡16.000",
+    image: cadiveuShampooImg,
+    description: "Champú anti-frizz de uso diario para cabellos rebeldes y encrespados. Limpia con delicadeza mientras regenera la fibra capilar, eliminando el frizz y aportando una suavidad excepcional.",
+    benefits: [
+      "Limpia suavemente controlando el frizz de manera eficaz",
+      "Enriquecido con Queratina, Cacau natural y D-Pantenol",
+      "Prepara el cabello para un tratamiento liso de larga duración"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "moroccanoil_body_scrub",
+    brand: "Moroccanoil",
+    name: "Moroccanoil Body Polishing Scrub - Hydrating Exfoliation",
+    price: "₡10.000",
+    image: moroccanoilBodyScrubImg,
+    description: "Exfoliante corporal nutritivo y altamente hidratante. Contiene polvo de cáscara de argán y aceite de argán para pulir suavemente la piel, dejándola increíblemente suave, renovada y sedosa.",
+    benefits: [
+      "Exfoliación suave pero efectiva con polvo de cáscara de Argán",
+      "Nutre profundamente gracias al Aceite de Argán antioxidante",
+      "Revela una piel suave, revitalizada, luminosa e intensamente hidratada"
+    ],
+    inStock: true,
+    category: "corporal"
+  },
+  {
+    id: "loreal_metal_detox_mask",
+    brand: "L'Oréal Professionnel",
+    name: "Serie Expert Metal Detox Masque 250 ml",
+    price: "₡27.000",
+    image: lorealMetalDetoxMaskImg,
+    description: "Mascarilla protectora anti-depósito de metales para después de la coloración o balayage. Protege la fibra de los depósitos de partículas tras cualquier servicio de color, balayage o decoloración.",
+    benefits: [
+      "87% menos riesgo de rotura del cabello",
+      "Resultado de color 100% optimizado y de larga duración",
+      "Brillo radiante con nutrición profunda y alta manejabilidad"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "moroccanoil_intense_hydrating_mask",
+    brand: "Moroccanoil",
+    name: "Intense Hydrating Mask 250 ml",
+    price: "₡38.500",
+    image: moroccanoilHydratingMaskImg,
+    description: "Mascarilla de hidratación profunda de alto rendimiento para cabellos secos de medio a grueso. Enriquecida con aceite de argán rico en antioxidantes para hidratar y acondicionar profundamente.",
+    benefits: [
+      "Hidratación profunda y acondicionamiento intenso",
+      "Mejora significativamente la textura, elasticidad y brillo",
+      "Fórmula rica con aceite de argán para revitalizar el cabello"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "biokera_yellow_shot_curly_cream",
+    brand: "Biokera Natura",
+    name: "Fresh Yellow Shot Curly Cream 300 ml",
+    price: "₡21.000",
+    image: biokeraYellowShotCurlyCreamImg,
+    description: "Crema para definición de rizos formulada bajo el método curly con un 98% de ingredientes de origen natural. Enriquecida con cóctel amarillo (plátano y ginseng) para nutrir, definir y eliminar el frizz.",
+    benefits: [
+      "Definición perfecta y elástica de rizos y ondas sin apelmazar",
+      "Fórmula natural con plátano y ginseng para hidratación profunda",
+      "Apto para el Método Curly y libre de sulfatos y siliconas"
+    ],
+    inStock: true,
+    category: "estilizado"
+  },
+  {
+    id: "salerm_wheat_germ_mask",
+    brand: "Salerm Cosmetics",
+    name: "Mascarilla Capilar al Germen de Trigo 200 ml",
+    price: "₡28.000",
+    image: salermWheatGermMaskImg,
+    description: "Mascarilla capilar nutritiva recomendada para cabellos secos o dañados. Enriquecida con aceite de germen de trigo y Provitamina B5 para devolver la vitalidad, hidratación y brillo al cabello.",
+    benefits: [
+      "Nutrición intensiva para cabellos extremadamente secos o maltratados",
+      "Fórmula con germen de trigo natural and Provitamina B5",
+      "Efecto revitalizante que devuelve la elasticidad, suavidad y brillo"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "biokera_yellow_shot_mask",
+    brand: "Biokera Natura",
+    name: "Fresh Yellow Shot Mask 250 ml",
+    price: "₡22.500",
+    image: biokeraYellowShotMaskImg,
+    description: "Mascarilla capilar reparadora y protectora formulada con un 97% de ingredientes de origen natural. Diseñada con un cóctel amarillo de plátano y ginseng para nutrir intensamente y proteger la fibra.",
+    benefits: [
+      "Reparación intensiva y protección profunda de la fibra capilar",
+      "Fórmula natural con plátano y ginseng que nutre y aporta elasticidad",
+      "Libre de sulfatos y parabenos, ideal para revitalizar cabellos dañados"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "biokera_green_shot_balsam",
+    brand: "Biokera Natura",
+    name: "Fresh Green Shot Balsam 300 ml",
+    price: "₡23.500",
+    image: biokeraGreenShotBalsamImg,
+    description: "Bálsamo capilar hidratante y desintoxicante con un 97% de ingredientes de origen natural. Enriquecido con cóctel verde (manzana, aloe vera y menta) para purificar, refrescar e hidratar.",
+    benefits: [
+      "Acción hidratante, acondicionadora y desenredante inmediata",
+      "Efecto desintoxicante y purificante para un cabello más ligero",
+      "Enriquecido con manzana ácida, aloe vera y menta refrescante"
+    ],
+    inStock: true,
+    category: "acondicionador"
+  },
+  {
+    id: "biokera_oily_hair_shampoo",
+    brand: "Salerm Cosmetics",
+    name: "Biokera Specific Oily Hair Shampoo 300 ml",
+    price: "₡20.500",
+    image: biokeraOilyHairShampooImg,
+    description: "Champú específico para regular y normalizar el exceso de grasa en el cuero cabelludo. Limpia profundamente respetando el pH fisiológico, dejando el cabello fresco, ligero y con volumen natural.",
+    benefits: [
+      "Regula eficazmente la producción de sebo en el cuero cabelludo",
+      "Limpia profundamente y aporta frescura duradera",
+      "Fórmula suave que deja el cabello suelto, ligero y brillante"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "biokera_oily_hair_mask",
+    brand: "Salerm Cosmetics",
+    name: "Biokera Specific Oily Hair Mask 200 ml",
+    price: "₡23.500",
+    image: biokeraOilyHairMaskImg,
+    description: "Mascarilla purificante y equilibrante específica para cabello graso. Ayuda a prolongar el tiempo entre lavados regulando el exceso de grasa mientras hidrata la fibra sin apelmazar.",
+    benefits: [
+      "Purifica intensamente el cuero cabelludo y la fibra capilar",
+      "Control del exceso de grasa sin restar hidratación ni volumen",
+      "Facilita el desenredado y aporta suavidad y ligereza natural"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "biokera_dandruff_mask",
+    brand: "Salerm Cosmetics",
+    name: "Biokera Specific Dandruff Mask 200 ml",
+    price: "₡21.000",
+    image: biokeraDandruffMaskImg,
+    description: "Mascarilla capilar purificante de acción intensiva anticaspa. Ayuda a normalizar el ciclo de descamación celular, hidratando el cuero cabelludo y eliminando la caspa de forma prolongada.",
+    benefits: [
+      "Combate de manera eficaz y duradera la descamación y caspa",
+      "Calma el cuero cabelludo sensible, aliviando el picor y la irritación",
+      "Fórmula acondicionadora que aporta brillo, suavidad y elasticidad"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "loreal_silver_shampoo",
+    brand: "L'Oréal Professionnel",
+    name: "Serie Expert Silver Shampoo 300 ml",
+    price: "₡18.000",
+    image: lorealSilverShampooImg,
+    description: "Champú perfeccionador y neutralizador para cabellos grises, blancos o rubios platinados. Elimina eficazmente los reflejos amarillos indeseados.",
+    benefits: [
+      "Neutraliza los tonos amarillos en cabellos blancos o platinados",
+      "Enriquecido con aminoácidos y agentes protectores",
+      "Aporta suavidad extrema y un brillo frío impecable"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "loreal_silver_conditioner",
+    brand: "L'Oréal Professionnel",
+    name: "Serie Expert Silver Conditioner 200 ml",
+    price: "₡19.500",
+    image: lorealSilverConditionerImg,
+    description: "Acondicionador suavizante e iluminador con pigmentos azules y violetas. Diseñado para nutrir el cabello mientras neutraliza subtonos cálidos y amarillos.",
+    benefits: [
+      "Nutre profundamente aportando ligereza y elasticidad",
+      "Potencia el reflejo frío y luminoso del cabello platinado",
+      "Facilita instantáneamente el peinado y aporta sedosidad"
+    ],
+    inStock: true,
+    category: "acondicionador"
+  },
+  {
+    id: "loreal_absolut_repair_conditioner",
+    brand: "L'Oréal Professionnel",
+    name: "Serie Expert Absolut Repair Conditioner 200 ml",
+    price: "₡19.500",
+    image: lorealAbsolutRepairConditionerImg,
+    description: "Acondicionador de reparación instantánea para cabellos muy dañados o debilitados. Reestructura la fibra capilar aportándole un tacto ligero.",
+    benefits: [
+      "Reparación instantánea y visible de la superficie capilar",
+      "Fórmula ligera con quinoa dorada y proteínas",
+      "Reduce el daño superficial en un 77% sin aportar peso"
+    ],
+    inStock: true,
+    category: "acondicionador"
+  },
+  {
+    id: "loreal_vitamino_color_shampoo",
+    brand: "L'Oréal Professionnel",
+    name: "Serie Expert Vitamino Color Shampoo 300 ml",
+    price: "₡18.000",
+    image: lorealVitaminoColorShampooImg,
+    description: "Champú fijador del color y perfeccionador del brillo para cabellos teñidos. Protege la fibra contra el desvanecimiento del color.",
+    benefits: [
+      "Prolonga la duración e intensidad del color hasta por 8 semanas",
+      "Fórmula profesional antioxidante con resveratrol",
+      "Limpia suavemente aportando brillo y luminosidad extrema"
+    ],
+    inStock: true,
+    category: "shampoo"
+  },
+  {
+    id: "tec_italy_scultore_fine",
+    brand: "Tec Italy",
+    name: "Scultore Fine Styling Liquid Gel 300 ml",
+    price: "₡15.000",
+    image: tecItalyScultoreFineImg,
+    description: "Gel líquido de estilizado y modelado profesional. Aporta una fijación flexible y definición excepcional, ideal para definir rizos y controlar el frizz.",
+    benefits: [
+      "Define y esculpe rizos y ondas con caída natural",
+      "Contiene extracto de girasol y aminoácidos de trigo",
+      "Fórmula acondicionadora que no deja residuos pesados"
+    ],
+    inStock: true,
+    category: "estilizado"
+  },
+  {
+    id: "tec_italy_due_faccetta_giorno",
+    brand: "Tec Italy",
+    name: "Due Faccetta Giorno Per Giorno Treatment 300 ml",
+    price: "₡16.000",
+    image: tecItalyDueFaccettaGiornoImg,
+    description: "Tratamiento bifásico hidratante y reconstructor de uso diario. Diseñado para desenredar instantáneamente y proteger el cabello de factores externos.",
+    benefits: [
+      "Hidratación intensiva inmediata con acción desenredante",
+      "Protección contra rayos UV y herramientas térmicas",
+      "Enriquecido con proteínas de trigo y aceites naturales"
+    ],
+    inStock: true,
+    category: "mascarilla"
+  },
+  {
+    id: "tec_italy_due_faccetta_massimo",
+    brand: "Tec Italy",
+    name: "Due Faccetta Massimo Treatment 300 ml",
+    price: "₡16.000",
+    image: tecItalyDueFaccettaMassimoImg,
+    description: "Tratamiento hidratante y reconstructor bifásico de acción profunda para cabellos sobreprocesados o maltratados.",
+    benefits: [
+      "Nutrición y reestructuración profunda de la hebra",
+      "Sella la cutícula aportando suavidad y brillo tridimensional",
+      "Fórmula ligera protectora enriquecida con aminoácidos"
+    ],
+    inStock: true,
+    category: "mascarilla"
   }
 ];
 
@@ -141,6 +645,8 @@ export default function App() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [showAllServices, setShowAllServices] = useState(false);
+  const [activeProductCategory, setActiveProductCategory] = useState<string>('todos');
+  const [productSearchQuery, setProductSearchQuery] = useState<string>('');
 
   // Manage selection
   const handleToggleService = (service: Service) => {
@@ -520,96 +1026,279 @@ export default function App() {
       </section>
 
       {/* Products Section */}
-      <section id="productos" className="py-20 bg-white border-b border-black/5">
+      <section id="productos" className="py-24 bg-white border-b border-black/5">
         <div className="max-w-7xl mx-auto px-4 md:px-6 space-y-12">
           
           {/* Section Header */}
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-editorial-camel text-[10px] font-bold uppercase tracking-widest font-sans">Boutique Profesional</span>
             <h2 className="font-display font-medium text-3xl md:text-4xl text-editorial-charcoal tracking-tight leading-tight">
               Línea de Productos Premium
             </h2>
-            <p className="text-xs text-neutral-600 max-w-xl mx-auto font-sans">
-              Lleva el cuidado de salón a la comodidad de tu hogar con fórmulas exclusivas de alta gama, recomendadas por nuestros expertos en color.
+            <p className="text-xs md:text-sm text-neutral-500 font-sans leading-relaxed">
+              Lleva el cuidado de salón de alta gama a la comodidad de tu hogar. Fórmulas de exclusividad profesional recomendadas por nuestros expertos en coloración.
             </p>
           </div>
 
-          {/* Product Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 max-w-7xl mx-auto">
-            {PRODUCTS.map((product) => (
-              <div 
-                key={product.id}
-                className="group flex flex-col bg-[#FAF7F5] border border-black/10 hover:border-editorial-camel/40 hover:shadow-md transition-all duration-300 rounded-none overflow-hidden"
-              >
-                {/* Product Image */}
-                <div className="aspect-square w-full bg-white overflow-hidden border-b border-black/5 relative">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-
-                {/* Product Info */}
-                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-editorial-camel text-[8px] font-bold uppercase tracking-widest font-sans">
-                        {product.brand}
-                      </span>
-                      <span className="text-[8px] text-emerald-600 font-bold uppercase tracking-widest font-sans flex items-center gap-1">
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> En Stock
-                      </span>
-                    </div>
-
-                    <h3 className="font-display font-semibold text-xs text-editorial-charcoal line-clamp-2 min-h-[2rem] leading-tight">
-                      {product.name}
-                    </h3>
-
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="font-sans font-bold text-base text-editorial-charcoal">{product.price}</span>
-                      <span className="text-[8px] text-neutral-400 font-sans">IVA Incluido</span>
-                    </div>
-
-                    <p className="text-[11px] text-neutral-500 leading-relaxed font-sans line-clamp-2">
-                      {product.description}
-                    </p>
-                  </div>
-
-                  {/* Benefits mini list */}
-                  <div className="space-y-1 pt-2 border-t border-black/5">
-                    {product.benefits.map((benefit, i) => (
-                      <div key={i} className="flex items-center gap-1 text-[10px] text-neutral-600">
-                        <Check className="w-2.5 h-2.5 text-editorial-camel shrink-0" />
-                        <span className="truncate">{benefit}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Actions */}
-                  <div className="space-y-1.5 pt-2">
-                    <a
-                      href={`https://wa.me/50671049478?text=${encodeURIComponent(`Hola NYC Salón Beauty Supply! Me interesa comprar el producto ${product.name} que vi en su sitio web.`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-editorial-charcoal text-white hover:bg-editorial-camel hover:text-white font-bold text-[9px] uppercase tracking-widest py-2 rounded-none transition-colors text-center shadow-xs flex items-center justify-center gap-1 cursor-pointer"
+          {/* Interactive Filters & Search Bar Control Panel */}
+          <div className="space-y-6 max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between border-b border-black/5 pb-6">
+              
+              {/* Category Filter Tabs */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 shrink-0 -mx-4 px-4 lg:mx-0 lg:px-0">
+                {[
+                  { id: 'todos', name: 'Todos', count: PRODUCTS.length },
+                  { id: 'shampoo', name: 'Shampoos', count: PRODUCTS.filter(p => p.category === 'shampoo').length },
+                  { id: 'acondicionador', name: 'Acondicionadores', count: PRODUCTS.filter(p => p.category === 'acondicionador').length },
+                  { id: 'mascarilla', name: 'Mascarillas & Trats.', count: PRODUCTS.filter(p => p.category === 'mascarilla').length },
+                  { id: 'estilizado', name: 'Estilizado & Sérums', count: PRODUCTS.filter(p => p.category === 'estilizado').length },
+                  { id: 'corporal', name: 'Corporal', count: PRODUCTS.filter(p => p.category === 'corporal').length },
+                ].map((cat) => {
+                  const isActive = activeProductCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setActiveProductCategory(cat.id);
+                      }}
+                      className={`px-4 py-2 text-xs font-sans tracking-wide transition-all duration-300 flex items-center gap-2 rounded-none whitespace-nowrap cursor-pointer ${
+                        isActive
+                          ? "bg-editorial-charcoal text-white font-bold"
+                          : "bg-[#FAF7F5] text-neutral-600 hover:bg-editorial-camel/10 hover:text-editorial-charcoal border border-black/5"
+                      }`}
                     >
-                      Comprar WhatsApp <ArrowRight className="w-2.5 h-2.5" />
-                    </a>
+                      <span>{cat.name}</span>
+                      <span className={`text-[9px] px-1.5 py-0.5 font-bold ${
+                        isActive ? "bg-white/20 text-white" : "bg-neutral-200 text-neutral-600"
+                      }`}>
+                        {cat.count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Live Search Input */}
+              <div className="relative w-full lg:max-w-xs shrink-0">
+                <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Buscar producto..."
+                  value={productSearchQuery}
+                  onChange={(e) => setProductSearchQuery(e.target.value)}
+                  className="w-full bg-[#FAF7F5] border border-black/10 focus:border-editorial-camel text-xs px-9 py-2.5 rounded-none outline-hidden font-sans placeholder-neutral-400 text-editorial-charcoal transition-colors"
+                />
+                {productSearchQuery && (
+                  <button
+                    onClick={() => setProductSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-editorial-charcoal transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Render Products Grouped in Beautiful Sections */}
+          <div className="space-y-16">
+            {(() => {
+              // 1. Filter products by search and category
+              const filteredProducts = PRODUCTS.filter(product => {
+                const matchesSearch = 
+                  product.name.toLowerCase().includes(productSearchQuery.toLowerCase()) ||
+                  product.brand.toLowerCase().includes(productSearchQuery.toLowerCase()) ||
+                  product.description.toLowerCase().includes(productSearchQuery.toLowerCase());
+                
+                const matchesCategory = activeProductCategory === 'todos' || product.category === activeProductCategory;
+                
+                return matchesSearch && matchesCategory;
+              });
+
+              // Section metadata map
+              const SECTION_METADATA: { [key: string]: { title: string; subtitle: string; description: string; accentClass: string } } = {
+                shampoo: {
+                  title: "Shampoos & Limpieza Capilar",
+                  subtitle: "EQUILIBRIO, HIGIENE Y PROTECCIÓN DIARIA",
+                  description: "Limpia y purifica delicadamente la fibra y el cuero cabelludo, preparando el cabello para tratamientos más profundos.",
+                  accentClass: "border-amber-500/50 bg-amber-50/40"
+                },
+                acondicionador: {
+                  title: "Acondicionadores & Bálsamos",
+                  subtitle: "SELLADO DE CUTÍCULA, BRILLO Y PREVENCIÓN DE DAÑO",
+                  description: "Cuidado de uso frecuente que desenreda instantáneamente, hidrata y bloquea los efectos del daño diario.",
+                  accentClass: "border-blue-500/50 bg-blue-50/40"
+                },
+                mascarilla: {
+                  title: "Mascarillas & Tratamientos Reconstructores",
+                  subtitle: "REPARACIÓN INTERNA INTENSIVA Y NUTRICIÓN COMPLETA",
+                  description: "Tratamientos profesionales de alta penetración que restauran la queratina, hidratación y elasticidad natural.",
+                  accentClass: "border-purple-500/50 bg-purple-50/40"
+                },
+                estilizado: {
+                  title: "Estilizado, Sérums & Finalizadores",
+                  subtitle: "MOLDEADO, CONTROL DE ENCRESPAMIENTO Y ACABADO SEDOSO",
+                  description: "Sérums sublimes, geles líquidos y sprays térmicos diseñados para esculpir con precisión y aportar brillo radiante.",
+                  accentClass: "border-rose-500/50 bg-rose-50/40"
+                },
+                corporal: {
+                  title: "Cuidado Corporal Premium",
+                  subtitle: "EXFOLIACIÓN E HIDRATACIÓN INTEGRAL DE LUJO",
+                  description: "Formulaciones finas con extractos naturales y aceites nutritivos para renovar y pulir tu piel dejándola tersa y perfumada.",
+                  accentClass: "border-emerald-500/50 bg-emerald-50/40"
+                }
+              };
+
+              // Categories order to map
+              const categoriesToRender = activeProductCategory === 'todos'
+                ? ['shampoo', 'acondicionador', 'mascarilla', 'estilizado', 'corporal']
+                : [activeProductCategory];
+
+              const sectionsWithProducts = categoriesToRender.filter(catId => 
+                filteredProducts.some(p => p.category === catId)
+              );
+
+              if (sectionsWithProducts.length === 0) {
+                return (
+                  <div className="text-center py-16 bg-[#FAF7F5] border border-black/5 space-y-4 rounded-none max-w-xl mx-auto">
+                    <p className="text-sm text-neutral-500 font-sans">No se encontraron productos que coincidan con tu búsqueda.</p>
                     <button
                       onClick={() => {
-                        const msg = `Hola! Quisiera reservar para retirar en el salón el producto ${product.name} (${product.price}).`;
-                        window.open(`https://wa.me/50671049478?text=${encodeURIComponent(msg)}`, '_blank');
+                        setProductSearchQuery('');
+                        setActiveProductCategory('todos');
                       }}
-                      className="w-full border border-editorial-charcoal text-editorial-charcoal hover:bg-editorial-charcoal hover:text-white font-bold text-[9px] uppercase tracking-widest py-1.5 rounded-none transition-colors text-center cursor-pointer"
+                      className="bg-editorial-charcoal text-white text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 hover:bg-editorial-camel transition-colors rounded-none cursor-pointer"
                     >
-                      Reservar Retiro
+                      Restablecer Filtros
                     </button>
                   </div>
-                </div>
-              </div>
-            ))}
+                );
+              }
+
+              return sectionsWithProducts.map(catId => {
+                const sectionMeta = SECTION_METADATA[catId];
+                const sectionProducts = filteredProducts.filter(p => p.category === catId);
+
+                return (
+                  <div key={catId} className="space-y-6 scroll-mt-24">
+                    
+                    {/* Section Label Header */}
+                    <div className={`p-6 border-l-4 ${sectionMeta.accentClass} flex flex-col md:flex-row md:items-center justify-between gap-4`}>
+                      <div className="space-y-1">
+                        <span className="text-[9px] font-bold uppercase tracking-widest text-editorial-camel font-sans block">
+                          {sectionMeta.subtitle}
+                        </span>
+                        <h3 className="font-display font-medium text-lg md:text-xl text-editorial-charcoal tracking-tight">
+                          {sectionMeta.title}
+                        </h3>
+                        <p className="text-[11px] text-neutral-500 max-w-3xl font-sans leading-relaxed">
+                          {sectionMeta.description}
+                        </p>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold text-neutral-400 whitespace-nowrap shrink-0 bg-white/80 border border-black/5 px-2.5 py-1">
+                        {sectionProducts.length} {sectionProducts.length === 1 ? 'producto' : 'productos'}
+                      </span>
+                    </div>
+
+                    {/* Products Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {sectionProducts.map((product) => (
+                        <div 
+                          key={product.id}
+                          className="group flex flex-col bg-white border border-neutral-200 hover:border-editorial-camel/60 hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden p-4 relative"
+                        >
+                          {/* Inner container to group nicely */}
+                          <div className="space-y-4 flex-1 flex flex-col justify-between">
+                            
+                            <div className="space-y-3">
+                              {/* Product Image Container (Casilla de Imagen) */}
+                              <div className="aspect-square w-full bg-neutral-50 rounded-lg overflow-hidden border border-neutral-100 relative group-hover:shadow-xs transition-shadow duration-300">
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                  referrerPolicy="no-referrer"
+                                />
+                                {/* Soft badge on the image itself */}
+                                <div className="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-xs px-2 py-0.5 border border-black/5 rounded-full">
+                                  <span className="text-[8px] text-emerald-600 font-bold uppercase tracking-widest font-sans flex items-center gap-1">
+                                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> En Stock
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Brand and category info */}
+                              <div className="space-y-1">
+                                <span className="text-editorial-camel text-[9px] font-bold uppercase tracking-widest font-sans block">
+                                  {product.brand}
+                                </span>
+                                <h3 className="font-display font-bold text-sm text-editorial-charcoal leading-snug group-hover:text-editorial-camel transition-colors min-h-[2.5rem] line-clamp-2">
+                                  {product.name}
+                                </h3>
+                              </div>
+
+                              {/* Price Division Box */}
+                              <div className="bg-[#FAF7F5] border border-black/5 p-2.5 rounded-lg flex items-center justify-between">
+                                <div className="flex flex-col">
+                                  <span className="text-[8px] text-neutral-400 font-sans uppercase tracking-wider">Precio Especial</span>
+                                  <span className="font-sans font-extrabold text-base text-editorial-charcoal">{product.price}</span>
+                                </div>
+                                <span className="text-[8px] bg-neutral-200/50 text-neutral-600 px-1.5 py-0.5 rounded-sm font-sans font-bold">IVA Incluido</span>
+                              </div>
+
+                              {/* Description Box with comfortable line height */}
+                              <p className="text-[11px] text-neutral-500 leading-relaxed font-sans min-h-[3rem] line-clamp-3">
+                                {product.description}
+                              </p>
+                            </div>
+
+                            <div className="space-y-4">
+                              {/* Benefits List (Casilla de Beneficios) */}
+                              <div className="pt-3 border-t border-dashed border-neutral-200 space-y-2">
+                                <span className="text-[8px] text-neutral-400 font-bold uppercase tracking-widest block">Beneficios Clave</span>
+                                <div className="space-y-1.5">
+                                  {product.benefits.map((benefit, i) => (
+                                    <div key={i} className="flex items-start gap-1.5 text-[10px] text-neutral-600 leading-tight">
+                                      <Check className="w-3 h-3 text-editorial-camel shrink-0 mt-0.5" />
+                                      <span className="font-sans">{benefit}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Action Buttons (Casilla de Acciones) */}
+                              <div className="pt-3 border-t border-neutral-100 space-y-2">
+                                <a
+                                  href={`https://wa.me/50671049478?text=${encodeURIComponent(`Hola NYC Salón Beauty Supply! Me interesa comprar el producto ${product.name} (${product.price}) que vi en su sitio web.`)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="w-full bg-editorial-charcoal text-white hover:bg-editorial-camel hover:text-white font-bold text-[9px] uppercase tracking-widest py-2.5 rounded-lg transition-all text-center shadow-xs flex items-center justify-center gap-1.5 cursor-pointer hover:shadow-md hover:-translate-y-0.5"
+                                >
+                                  Comprar WhatsApp <ArrowRight className="w-3 h-3" />
+                                </a>
+                                <button
+                                  onClick={() => {
+                                    const msg = `Hola! Quisiera reservar para retirar en el salón el producto ${product.name} (${product.price}).`;
+                                    window.open(`https://wa.me/50671049478?text=${encodeURIComponent(msg)}`, '_blank');
+                                  }}
+                                  className="w-full border border-neutral-200 text-neutral-600 hover:text-editorial-charcoal hover:bg-neutral-50 font-bold text-[9px] uppercase tracking-widest py-2 rounded-lg transition-all text-center cursor-pointer flex items-center justify-center gap-1"
+                                >
+                                  Reservar Retiro
+                                </button>
+                              </div>
+
+                            </div>
+
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                  </div>
+                );
+              });
+            })()}
           </div>
 
         </div>
